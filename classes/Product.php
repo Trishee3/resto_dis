@@ -17,10 +17,11 @@
 
         public function displayProducts(){
             $sql = "SELECT * FROM products";
+            $items = [];
 
             if($result = $this->conn->query($sql)){
                 while($item = $result->fetch_assoc()){
-                    $items[] = $items;
+                    $items[] = $item;
                 }
                 return $items;
             }else{
@@ -58,6 +59,10 @@
             }else{
                 die("Error In Adding Stock:".$this->conn->error);
             }
+        }
+
+        public function editProduct(){
+            // code here...
         }
     }
 ?>

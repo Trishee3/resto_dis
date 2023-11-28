@@ -4,7 +4,7 @@
 
     class user extends Database {
         
-        public function  Register($first_name, '$last_name, $username, $password){
+        public function  Register($first_name, $last_name, $username, $password){
             $sql = "INSERT INTO user (first_name, last_name, username, password)
                     VALUES ('$first_name', '$last_name', '$username', '$password')";
 
@@ -14,9 +14,8 @@
             }else{
                 die("Error in Registering; ".$this->conn->error);
             }
-            }    
+        }  
         
-}
         public function login($username, $password){
             $sql = "SELECT * FROM user WHERE username = '$username'";
 
@@ -31,7 +30,7 @@
                     $_SESSION['id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
 
-                    header("location: ../views/dashboard.php"):
+                    header("Location: dashboard.php");
                 }else{
                     die("Your Password is incorrect");
                 }
@@ -40,3 +39,6 @@
                 die("Username not found");
             }
         }
+        
+    }
+        

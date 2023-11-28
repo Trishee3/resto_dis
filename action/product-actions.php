@@ -25,3 +25,4 @@
 
         $product->addProduct($product_name, $price, $quantity);
     }
+?>
