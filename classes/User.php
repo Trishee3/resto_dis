@@ -1,44 +1,38 @@
 <?php
+require_once 'Database.php';
 
-    require "Database.php";
+class User {
+    private $conn;
 
-    class user extends Database {
-        
-        public function  Register($first_name, $last_name, $username, $password){
-            $sql = "INSERT INTO user (first_name, last_name, username, password)
-                    VALUES ('$first_name', '$last_name', '$username', '$password')";
-
-            if($this->conn->query($sql)){
-                header("location; ../views");
-                exit;
-            }else{
-                die("Error in Registering; ".$this->conn->error);
-            }
-        }  
-        
-        public function login($username, $password){
-            $sql = "SELECT * FROM user WHERE username = '$username'";
-
-            $result = $this->conn->query($sql);
-
-            if($result->num_rows == 1){
-                $user = $result->fetch_assoc();
-
-                if(password_verify($password, $user['password'])){
-                    session_start();
-
-                    $_SESSION['id'] = $user['id'];
-                    $_SESSION['username'] = $user['username'];
-
-                    header("Location: dashboard.php");
-                }else{
-                    die("Your Password is incorrect");
-                }
-            
-            }else{
-                die("Username not found");
-            }
-        }
-        
+    public function __construct() {
+        $db = new Database();
+        $this->conn = $db->connect();
     }
-        
+
+    public function createUser($username, $password, $isadmin) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->conn->prepare("INSERT INTO users (username, password, isadmin) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi", $username, $hashedPassword, $isadmin);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function getUserByUsername($username) {
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $result;
+    }
+
+    // public function getAccessLevel($access) {
+    //     $stmt = $this->conn->prepare("SELECT * FROM users WHERE isadmin = 1");
+    //     $stmt->bind_param("s", $access);
+    //     $stmt->execute();
+    //     $result = $stmt->get_result()->fetch_assoc();
+    //     $stmt->close();
+    //     return $result;
+    // }
+}
+?>

@@ -1,18 +1,16 @@
 <?php
+class Database {
+    private $host = 'localhost';
+    private $username = 'root';
+    private $password = '';
+    private $database = 'php-oop';
 
-     class Database {
-     	private $server_name = "localhost";
-     	private $db_username = "root";
-     	private $db_password = "";
-     	private $db_name = "sales_oop";
-     	protected $conn;
-
-     	public function __construct(){
-
-     		$this->conn = new mysqli($this->server_name, $this->db_username, $this->db_password, $this->db_name);
-
-            if ($this->conn->connect_error){
-            	die("Usable to connect to Database" .$this->db_name . " : ". $this->conn->connect_error);
-          }
-     }    
-}    
+    public function connect() {
+        $conn = new mysqli($this->host, $this->username, $this->password, $this->database);
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        return $conn;
+    }
+}
+?>

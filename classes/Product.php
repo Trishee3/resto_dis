@@ -1,68 +1,47 @@
 <?php
 
-    require_once "Database.php";
+require_once 'Database.php';
+class Product {
+    private $conn;
 
-    class Product extends Database {
-
-        public function addProduct($product_name, $price, $quantity){
-            $sql = "INSERT INTO products (product_name, price, quantity) VALUES ('$product_name', '$price', '$quantity')";
-
-            if($this->conn->query($sql)){
-                header("location; ../views/dashboard.php");
-                exit;
-            }else{
-                die("Error in Adding: ".$this->conn->error);
-            }
-        }
-
-        public function displayProducts(){
-            $sql = "SELECT * FROM products";
-            $items = [];
-
-            if($result = $this->conn->query($sql)){
-                while($item = $result->fetch_assoc()){
-                    $items[] = $item;
-                }
-                return $items;
-            }else{
-                die("Error in Retrieving: ".$this->conn->error);
-            }
-        }
-
-        public function displaySpecificProduct($product_id){
-            $sql = "SELECT * FROM products WHERE id= '$product_id'";
-
-            if($result = $this->conn->query($sql)){
-                return $result->fetch_assoc();
-            }else{
-                die("error in Retrieving product :".$this->conn->error);
-            }
-        }
-
-        public function deleteProduct($product_id){
-            $sql = "DELETE FROM products WHERE id = '$product_id'";
-
-            if($this->conn->query($sql)){
-                header("location: ../views/dashboard.php");
-                exit;
-            }else{
-                die("Error in Deleting product: ".$this->conn->error);
-            }
-        }
-
-        public function adjustStock($product_id, $buy_quantity){
-            $sql = "UPDATE products SET quantity = quantity - '$buy_quantity' WHERE id = '$product_id'";
-
-            if($this->conn->query($sql)){
-                header("location: ../views/dashboard.php");
-                exit;
-            }else{
-                die("Error In Adding Stock:".$this->conn->error);
-            }
-        }
-
-        public function editProduct(){
-            // code here test trisha 123...
-        }
+    public function __construct() {
+        $db = new Database();
+        $this->conn = $db->connect();
     }
+
+    public function getAllProducts() {
+        $result = $this->conn->query("SELECT * FROM products");
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getProductById($productId) {
+        $stmt = $this->conn->prepare("SELECT * FROM products WHERE id = ?");
+        $stmt->bind_param("i", $productId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $result;
+    }
+
+    public function addProduct($productName, $price, $available) {
+        $stmt = $this->conn->prepare("INSERT INTO products (product_name, price, available) VALUES (?, ?, ?)");
+        $stmt->bind_param("sdi", $productName, $price, $available);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function  updateProduct($productId, $productName, $price, $available) {
+        $stmt = $this->conn->prepare("UPDATE products SET product_name=?, price=?, available=? WHERE id=?");
+        $stmt->bind_param("sdii", $productName, $price, $available, $productId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function deleteProduct($productId) {
+        $stmt = $this->conn->prepare("DELETE FROM products WHERE id = ?");
+        $stmt->bind_param("i", $productId);
+        $stmt->execute();
+        $stmt->close();
+    }
+}
 ?>
