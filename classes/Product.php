@@ -62,7 +62,7 @@
         }
 
         public function editProduct(){
-            // code here test trisha...
+            // code here test trisha 123...
         }
     }
 ?>
