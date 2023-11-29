@@ -11,17 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($auth->login($username, $password)) {
         $_SESSION['username'] = $username;
 
-        if($_SESSION['isadmin'] === 1){
-
+        if ($_SESSION['isadmin'] === 1) {
             header('Location: ../views/dashboard.php');
-
-        }else if($_SESSION['isadmin'] === 0){
-
+        } else if ($_SESSION['isadmin'] === 0) {
             header('Location: ../views/menu.php');
-
-        }else{
+        } else {
             header('Location: ../views/403.php');
         }
+        
         exit();
     } else {
         $_SESSION['error'] = "Invalid username or password";
@@ -29,4 +26,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 }
-?>
