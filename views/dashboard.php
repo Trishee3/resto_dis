@@ -5,6 +5,11 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+if ($_SESSION['isadmin'] !== 1) {
+    header('Location: 403.php');
+    exit();
+}
+
 require_once '../classes/Product.php';
 
 $product = new Product();
@@ -37,7 +42,7 @@ $products = $product->getAllProducts();
     </style>
 </head>
 <body>
-    <h2>Welcome, <?php echo $_SESSION['username']; ?> &nbsp; <span><a href="logout.php">Logout</a></span></h2>
+    <h2>Welcome, <?php echo $_SESSION['username']; ?></h2>
     <?php include './sidebar.php'; ?>
     <h3>Product List</h3>
     <table>

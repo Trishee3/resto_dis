@@ -25,14 +25,5 @@ class User {
         $stmt->close();
         return $result;
     }
-
-    // public function getAccessLevel($access) {
-    //     $stmt = $this->conn->prepare("SELECT * FROM users WHERE isadmin = 1");
-    //     $stmt->bind_param("s", $access);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result()->fetch_assoc();
-    //     $stmt->close();
-    //     return $result;
-    // }
 }
 ?>

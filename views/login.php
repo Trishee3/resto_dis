@@ -8,8 +8,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $auth = new Auth();
     if ($auth->login($username, $password)) {
+        
         $_SESSION['username'] = $username;
-        header('Location: ./dashboard.php');
+
+        if($_SESSION['isadmin'] === 1){
+            header('Location: dashboard.php');
+        }else if($_SESSION['isadmin'] === 0){
+            header('Location: menu.php');
+        }else{
+            header('Location: 403.php');
+        }
         exit();
     } else {
         $error = "Invalid username or password";

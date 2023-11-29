@@ -1,18 +1,17 @@
 <?php
-    require_once '../classes/User.php';
-    $admin = 0;
-    // $accessLevel = new User();
-
-    // $admin = $accessLevel->getAccessLevel($access);
-    // echo $admin;
-    if($admin == 1){
-        ?>
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+    if($_SESSION['isadmin'] === 1){
+?>
         <a href="dashboard.php">Dashboard</a>
         <a href="add-account.php">Add Accounts</a>
         <a href="add-product.php">Add product</a>
-    <?php
+<?php
     }else{?>
-        <a href="">Menu</a>
+        <a href="menu.php">Menu</a>
     <?php
     }
 ?>
+<a href="logout.php">Logout</a>
