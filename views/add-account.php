@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Add Account</title>
 </head>
 <body>
+    <?php include './sidebar.php'; ?>
     <h2>Add Account</h2>
     <form method="post">
         <label for="username">Username:</label>
