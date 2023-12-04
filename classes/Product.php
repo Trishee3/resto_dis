@@ -1,20 +1,24 @@
 <?php
 
 require_once 'Database.php';
-class Product {
+class Product
+{
     private $conn;
 
-    public function __construct() {
+    public function __construct()
+    {
         $db = new Database();
         $this->conn = $db->connect();
     }
 
-    public function getAllProducts() {
+    public function getAllProducts()
+    {
         $result = $this->conn->query("SELECT * FROM products");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getProductById($productId) {
+    public function getProductById($productId)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM products WHERE id = ?");
         $stmt->bind_param("i", $productId);
         $stmt->execute();
@@ -23,25 +27,40 @@ class Product {
         return $result;
     }
 
-    public function addProduct($productName, $price, $available) {
+    public function addProduct($productName, $price, $available)
+    {
         $stmt = $this->conn->prepare("INSERT INTO products (product_name, price, available) VALUES (?, ?, ?)");
         $stmt->bind_param("sdi", $productName, $price, $available);
         $stmt->execute();
         $stmt->close();
     }
 
-    public function  updateProduct($productId, $productName, $price, $available) {
+    public function  updateProduct($productId, $productName, $price, $available)
+    {
         $stmt = $this->conn->prepare("UPDATE products SET product_name=?, price=?, available=? WHERE id=?");
         $stmt->bind_param("sdii", $productName, $price, $available, $productId);
         $stmt->execute();
         $stmt->close();
     }
 
-    public function deleteProduct($productId) {
+    public function deleteProduct($productId)
+    {
         $stmt = $this->conn->prepare("DELETE FROM products WHERE id = ?");
         $stmt->bind_param("i", $productId);
         $stmt->execute();
         $stmt->close();
     }
+
+    public function processTransaction($productId, $quantity, $totalCost)
+    {
+        $stmt = $this->conn->prepare("UPDATE products SET available = available - ? WHERE id = ?");
+        $stmt->bind_param("ii", $quantity, $productId);
+        $stmt->execute();
+        $stmt->close();
+
+        $stmt = $this->conn->prepare("INSERT INTO transactions (product_id, quantity, total_cost, transaction_date) VALUES (?, ?, ?, NOW())");
+        $stmt->bind_param("iii", $productId, $quantity, $totalCost);
+        $stmt->execute();
+        $stmt->close();
+    }
 }
-?>

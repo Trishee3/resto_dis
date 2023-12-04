@@ -11,7 +11,6 @@ class Auth {
     public function login($username, $password) {
         $user = $this->user->getUserByUsername($username);
         if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['isadmin'] = $user['isadmin'];
             return true;
         }
         return false;

@@ -5,13 +5,7 @@ $error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['error']);
 
 if (isset($_SESSION['username'])) {
-    if ($_SESSION['isadmin'] === 1) {
-        header('Location: dashboard.php');
-    } else if ($_SESSION['isadmin'] === 0) {
-        header('Location: menu.php');
-    } else {
-        header('Location: 403.php');
-    }
+    header('Location: dashboard.php');
     exit();
 }
 ?>

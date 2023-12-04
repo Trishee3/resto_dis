@@ -9,10 +9,10 @@ class User {
         $this->conn = $db->connect();
     }
 
-    public function createUser($username, $password, $isadmin) {
+    public function createUser($username, $password) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->conn->prepare("INSERT INTO users (username, password, isadmin) VALUES (?, ?, ?)");
-        $stmt->bind_param("ssi", $username, $hashedPassword, $isadmin);
+        $stmt = $this->conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $hashedPassword);
         $stmt->execute();
         $stmt->close();
     }

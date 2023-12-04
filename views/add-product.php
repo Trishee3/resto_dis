@@ -4,11 +4,6 @@ if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
 }
-
-if ($_SESSION['isadmin'] !== 1) {
-    header('Location: 403.php');
-    exit();
-}
 ?>
 
 <!DOCTYPE html> 

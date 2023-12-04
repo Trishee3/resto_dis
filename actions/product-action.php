@@ -1,6 +1,12 @@
 <?php
-session_start();
 require_once '../classes/Product.php';
+
+//get id
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
+    $productId = $_GET['id'];
+    $product = new Product();
+    $currentProduct = $product->getProductById($productId);
+}
 
 //add
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {

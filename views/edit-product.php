@@ -5,20 +5,9 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if ($_SESSION['isadmin'] !== 1) {
-    header('Location: 403.php');
-    exit();
-}
-
 require_once '../classes/Product.php';
 
-//get
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
-    $productId = $_GET['id'];
-    $product = new Product();
-    $currentProduct = $product->getProductById($productId);
-}
-
+include '../actions/product-action.php';
 ?>
 
 <!DOCTYPE html>

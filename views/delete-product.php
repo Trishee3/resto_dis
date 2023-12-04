@@ -5,11 +5,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if ($_SESSION['isadmin'] !== 1) {
-    header('Location: 403.php');
-    exit();
-}
-
 require_once '../classes/Product.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {

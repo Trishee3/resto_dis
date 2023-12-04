@@ -4,11 +4,6 @@ if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
 }
-
-if ($_SESSION['isadmin'] !== 1) {
-    header('Location: 403.php');
-    exit();
-}
 require_once '../classes/User.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -16,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     $user = new User();
-    $user->createUser($username, $password, 0);
+    $user->createUser($username, $password);
     header('Location: dashboard.php');
     exit();
 }

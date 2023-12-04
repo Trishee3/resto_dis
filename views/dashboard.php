@@ -5,15 +5,11 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if ($_SESSION['isadmin'] !== 1) {
-    header('Location: 403.php');
-    exit();
-}
-
 require_once '../classes/Product.php';
 
 $product = new Product();
 $products = $product->getAllProducts();
+
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +53,7 @@ $products = $product->getAllProducts();
             <tr>
                 <td><?php echo $product['id']; ?></td>
                 <td><?php echo $product['product_name']; ?></td>
-                <td><?php echo $product['price']; ?></td>
+                <td>₱ <?php echo number_format( $product['price'], 2, '.', ','); ?></td>
                 <td><?php echo $product['available']; ?></td>
                 <td>
                     <a href="edit-product.php?id=<?php echo $product['id']; ?>">Edit</a>
@@ -66,6 +62,5 @@ $products = $product->getAllProducts();
             </tr>
         <?php endforeach; ?>
     </table>
-    <br />
 </body>
 </html>
