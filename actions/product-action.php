@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $product = new Product();
     $product->addProduct($productName, $price, $available);
 
-    header('Location: ../views/dashboard.php');
+    header('Location: ../views/products.php');
     exit();
 }
 
@@ -31,6 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $product = new Product();
     $product->updateProduct($productId, $productName, $price, $available);
 
-    header('Location: ../views/dashboard.php');
+    header('Location: ../views/products.php');
     exit();
 }

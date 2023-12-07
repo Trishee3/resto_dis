@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $product = new Product();
     $product->deleteProduct($productId);
 
-    header('Location: dashboard.php');
+    header('Location: products.php');
     exit();
 } else {
     echo "Invalid request.";

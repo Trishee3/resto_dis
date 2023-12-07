@@ -7,8 +7,8 @@ if (!isset($_SESSION['username'])) {
 
 require_once '../classes/Product.php';
 
-$product = new Product();
-$products = $product->getAllProducts();
+$sale = new Product();
+$sales = $sale->getAllSales();
 
 ?>
 <!DOCTYPE html>
@@ -17,7 +17,7 @@ $products = $product->getAllProducts();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+    <title>Sales</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -42,25 +42,26 @@ $products = $product->getAllProducts();
 </head>
 
 <body>
-    <h1>Menu</h1>
+    <h1>Sales</h1>
     <?php include 'sidebar.php'; ?>
     <table>
         <tr>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Available</th>
-            <th>Actions</th>
+            <th>Id</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total Cost</th>
+            <th>Date of Transaction</th>
         </tr>
-        <?php foreach ($products as $product) : ?>
+        <?php foreach ($sales as $sale) : ?>
             <tr>
-                <td><?php echo $product['id']; ?></td>
-                <td><?php echo $product['product_name']; ?></td>
-                <td>₱ <?php echo number_format( $product['price'], 2, '.', ','); ?></td>
-                <td><?php echo $product['available']; ?></td>
-                <td>
-                    <a href="pay.php?id=<?php echo $product['id']; ?>">to POS</a>
-                </td>
+                <td><?php echo $sale['id']; ?></td>
+                <td><?php echo $sale['product_name']; ?></td>
+                <td><?php echo $sale['quantity']; ?></td>
+                <td>₱ <?php echo number_format( $sale['total_cost'], 2, '.', ','); ?></td>
+                <td><?php 
+                    $date = date_create($sale['transaction_Date']);
+                    echo date_format($date, "M d, Y h:i:A");
+                ?></td>
             </tr>
         <?php endforeach; ?>
     </table>

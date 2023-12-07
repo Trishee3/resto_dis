@@ -18,6 +18,9 @@ $products = $product->getAllProducts();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         table {
             width: 100%;
@@ -40,27 +43,5 @@ $products = $product->getAllProducts();
 <body>
     <h2>Welcome, <?php echo $_SESSION['username']; ?></h2>
     <?php include './sidebar.php'; ?>
-    <h3>Product List</h3>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Available</th>
-            <th>Actions</th>
-        </tr>
-        <?php foreach ($products as $product) : ?>
-            <tr>
-                <td><?php echo $product['id']; ?></td>
-                <td><?php echo $product['product_name']; ?></td>
-                <td>₱ <?php echo number_format( $product['price'], 2, '.', ','); ?></td>
-                <td><?php echo $product['available']; ?></td>
-                <td>
-                    <a href="edit-product.php?id=<?php echo $product['id']; ?>">Edit</a>
-                    <a href="delete-product.php?id=<?php echo $product['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
 </body>
 </html>

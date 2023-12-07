@@ -17,6 +17,12 @@ class Product
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getAllSales()
+    {
+        $result = $this->conn->query("SELECT * FROM transactions");
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getProductById($productId)
     {
         $stmt = $this->conn->prepare("SELECT * FROM products WHERE id = ?");
@@ -51,15 +57,15 @@ class Product
         $stmt->close();
     }
 
-    public function processTransaction($productId, $quantity, $totalCost)
+    public function processTransaction($productId, $productName, $quantity, $totalCost)
     {
         $stmt = $this->conn->prepare("UPDATE products SET available = available - ? WHERE id = ?");
         $stmt->bind_param("ii", $quantity, $productId);
         $stmt->execute();
         $stmt->close();
 
-        $stmt = $this->conn->prepare("INSERT INTO transactions (product_id, quantity, total_cost, transaction_date) VALUES (?, ?, ?, NOW())");
-        $stmt->bind_param("iii", $productId, $quantity, $totalCost);
+        $stmt = $this->conn->prepare("INSERT INTO transactions (product_name, quantity, total_cost, transaction_Date) VALUES (?, ?, ?, NOW())");
+        $stmt->bind_param("sid", $productName, $quantity, $totalCost);
         $stmt->execute();
         $stmt->close();
     }
