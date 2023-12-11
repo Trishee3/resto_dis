@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 
     $product = new Product();
     $product->addProduct($productName, $price, $available);
-
     header('Location: ../views/products.php');
     exit();
 }

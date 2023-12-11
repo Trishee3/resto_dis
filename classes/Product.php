@@ -19,7 +19,7 @@ class Product
 
     public function getAllSales()
     {
-        $result = $this->conn->query("SELECT * FROM transactions");
+        $result = $this->conn->query("SELECT * FROM transactions ORDER BY transaction_Date DESC");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -68,5 +68,45 @@ class Product
         $stmt->bind_param("sid", $productName, $quantity, $totalCost);
         $stmt->execute();
         $stmt->close();
+    }
+
+    public function numOfProducts()
+    {
+        $stmt = "SELECT COUNT(id) FROM products";
+        $result = $this->conn->query($stmt);
+
+        if ($result) {
+            $row = $result->fetch_assoc();
+            return $row['COUNT(id)'];
+        }
+
+        return 0;
+        
+    }
+
+    public function totalSales()
+    {
+        $stmt = "SELECT SUM(total_cost) FROM transactions";
+        $result = $this->conn->query($stmt);
+
+        if ($result) {
+            $row = $result->fetch_assoc();
+            return $row['SUM(total_cost)'];
+        }
+
+        return 0;
+    }
+
+    public function activeAccounts()
+    {
+        $stmt = "SELECT COUNT(id) FROM users";
+        $result = $this->conn->query($stmt);
+
+        if ($result) {
+            $row = $result->fetch_assoc();
+            return $row['COUNT(id)'];
+        }
+
+        return 0;
     }
 }
