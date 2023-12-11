@@ -82,6 +82,7 @@ if (!$selectedProduct) {
                                                     <option value="none">None</option>
                                                     <option value="sc">Senior Citizen</option>
                                                     <option value="pwd">PWD</option>
+                                                    <option value="5blw">5 below</option>
                                                 </select>
                                             </div>
                                             <div class="form-group mx-sm-3 mb-2">
@@ -131,6 +132,8 @@ if (!$selectedProduct) {
                     if (discountType === 'pwd') {
                         discount = .20;
                     } else if (discountType === 'sc') {
+                        discount = .20;
+                    } else if (discountType === '5blw') {
                         discount = .20;
                     }
 

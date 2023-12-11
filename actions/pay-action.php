@@ -26,8 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $discount = .20;
         } elseif ($selectedDiscount === 'pwd') {
             $discount = .20;
+        } elseif ($selectedDiscount === '5blw') {
+            $discount = .20;
         }
-
         if ($numOfDiscounts > 0) {
             $discount *= $numOfDiscounts;
         }
