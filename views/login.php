@@ -53,11 +53,12 @@ if (isset($_SESSION['username'])) {
                                     <div class="form-group">
                                         <input type="password" name="password" class="form-control form-control-user" placeholder="Enter Password ...">
                                     </div>
+                                    <hr>
                                     <button class="btn btn-primary btn-user btn-block" type="submit">
                                         Login
                                     </button>
-                                    <hr>
-                                    <?php if ($error) echo "<p>$error</p>"; ?>
+                                    <br />
+                                    <?php if ($error) echo "<p style='color:red;'>$error</p>"; ?>
                                 </form>
                             </div>
                         </div>

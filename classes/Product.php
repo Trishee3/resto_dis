@@ -33,18 +33,18 @@ class Product
         return $result;
     }
 
-    public function addProduct($productName, $price, $available)
+    public function addProduct($image, $productName, $price, $available)
     {
-        $stmt = $this->conn->prepare("INSERT INTO products (product_name, price, available) VALUES (?, ?, ?)");
-        $stmt->bind_param("sdi", $productName, $price, $available);
+        $stmt = $this->conn->prepare("INSERT INTO products (image, product_name, price, available) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssdi", $image, $productName, $price, $available);
         $stmt->execute();
         $stmt->close();
     }
 
-    public function  updateProduct($productId, $productName, $price, $available)
+    public function  updateProduct($image, $productId, $productName, $price, $available)
     {
-        $stmt = $this->conn->prepare("UPDATE products SET product_name=?, price=?, available=? WHERE id=?");
-        $stmt->bind_param("sdii", $productName, $price, $available, $productId);
+        $stmt = $this->conn->prepare("UPDATE products SET image=?, product_name=?, price=?, available=? WHERE id=?");
+        $stmt->bind_param("ssdii", $image, $productName, $price, $available, $productId);
         $stmt->execute();
         $stmt->close();
     }
@@ -57,19 +57,20 @@ class Product
         $stmt->close();
     }
 
-    public function processTransaction($productId, $productName, $quantity, $totalCost)
+    public function processTransaction($productId, $customerName, $productName, $quantity, $totalCost, $discountedAmount)
     {
         $stmt = $this->conn->prepare("UPDATE products SET available = available - ? WHERE id = ?");
         $stmt->bind_param("ii", $quantity, $productId);
         $stmt->execute();
         $stmt->close();
 
-        $stmt = $this->conn->prepare("INSERT INTO transactions (product_name, quantity, total_cost, transaction_Date) VALUES (?, ?, ?, NOW())");
-        $stmt->bind_param("sid", $productName, $quantity, $totalCost);
+        $stmt = $this->conn->prepare("INSERT INTO transactions (customer_name, product_name, quantity, discount, total_cost, transaction_Date) VALUES (?, ?, ?, ?, ?, NOW())");
+        $stmt->bind_param("ssidd", $customerName, $productName, $quantity, $discountedAmount, $totalCost);
         $stmt->execute();
         $stmt->close();
     }
 
+    // for dashboard counts
     public function numOfProducts()
     {
         $stmt = "SELECT COUNT(id) FROM products";

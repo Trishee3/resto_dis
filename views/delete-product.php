@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $product = new Product();
     $product->deleteProduct($productId);
 
+    $_SESSION['delete_message'] = 'Product has been deleted!';
     header('Location: products.php');
     exit();
 } else {

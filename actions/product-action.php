@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../classes/Product.php';
 
 //get id
@@ -14,8 +15,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $price = $_POST['price'];
     $available = $_POST['available'];
 
-    $product = new Product();
-    $product->addProduct($productName, $price, $available);
+    $target_dir = "../assets/uploads/productImage/";
+    $target_file = $target_dir . basename($_FILES['image']['name']);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    $check = getimagesize($_FILES['image']['tmp_name']);
+
+    if ($check !== false) {
+
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        if (in_array($imageFileType, $allowedExtensions)) {
+            move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
+
+            $product = new Product();
+            $product->addProduct($target_file, $productName, $price, $available);
+
+            $_SESSION['success_message'] = 'New product was added!';
+        }else{
+            $_SESSION['error_message'] = 'Sorry only JPG, JPEG, PNG, and GIF files are allowed!';
+        }
+    }else{
+        $_SESSION['error_message'] = 'File is not an image!';
+    }
+
+
     header('Location: ../views/products.php');
     exit();
 }
@@ -27,9 +50,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $price = $_POST['price'];
     $available = $_POST['available'];
 
-    $product = new Product();
-    $product->updateProduct($productId, $productName, $price, $available);
+    $target_dir = "../assets/uploads/productImage/";
+    $target_file = $target_dir . basename($_FILES['image']['name']);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
+    $check = getimagesize($_FILES['image']['tmp_name']);
+
+    // Retrieve the existing product details
+    $existingProduct = new Product();
+    $existingData = $existingProduct->getProductById($productId);
+
+    // Check if there are changes
+    if (
+        $target_file === $existingData['image'] &&
+        $productName === $existingData['product_name'] &&
+        $price === (string)$existingData['price'] &&
+        $available === (string)$existingData['available']
+    ) {
+        // No changes, redirect back without updating
+        $_SESSION['update_message'] = '<strong>No changes were made!</strong>';
+    } else {
+        if ($check !== false) {
+
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+            if (in_array($imageFileType, $allowedExtensions)) {
+                move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
+
+                $product = new Product();
+                $product->updateProduct($target_file, $productId, $productName, $price, $available);
+
+                $_SESSION['update_message'] = '<strong>Sucesss!</strong> Product has been updated!';
+            } else {
+                $_SESSION['error_message'] = 'Sorry only JPG, JPEG, PNG, and GIF files are allowed!';
+            }
+        } else {
+            $_SESSION['error_message'] = 'File is not an image!';
+        }
+    }
     header('Location: ../views/products.php');
     exit();
 }

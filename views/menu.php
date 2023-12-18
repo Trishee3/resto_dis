@@ -10,6 +10,9 @@ require_once '../classes/Product.php';
 $product = new Product();
 $products = $product->getAllProducts();
 
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : null;
+unset($_SESSION['success_message']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +27,6 @@ $products = $product->getAllProducts();
 
     <!-- Custom styles for this template-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
-    </style>
 </head>
 
 <body id="page-top">
@@ -36,13 +38,19 @@ $products = $product->getAllProducts();
                 <?php include 'topbar.php'; ?>
                 <div class="container-fluid">
                     <!-- Page Heading -->
+                    <?php if ($successMessage) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong><?php echo $successMessage; ?></strong>
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        </div>
+                    <?php endif; ?>
                     <h1 class="h3 mb-4 text-gray-800">Menu</h1>
                     <div class="d-flex justify-content-start">
                         <div class="row">
                             <?php foreach ($products as $product) : ?>
                                 <div class="col">
                                     <div class="card" style="width: 18rem; margin-bottom: 15px;">
-                                        <img src="../assets/img/buffet.png" class="card-img-top" alt="...">
+                                        <img src="<?php echo $product['image']?>" class="card-img-top" alt="Product Image" style="width: 100%; height: 200px;">
                                         <div class="card-body">
                                             <h5 class="card-title"><?php echo $product['product_name']; ?></h5>
                                             <p class="card-text">Price: ₱ <?php echo number_format($product['price'], 2, '.', ','); ?></p>

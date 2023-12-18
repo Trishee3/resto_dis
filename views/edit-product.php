@@ -1,3 +1,5 @@
+<!-- NOT USED AS OF NOW - transitioning to edit modal for better ui experience ;) -->
+
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {

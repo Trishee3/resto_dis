@@ -68,14 +68,16 @@ if (!$selectedProduct) {
                         <div class="col-lg-6">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Order Summary</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Purchase Details</h6>
                                 </div>
                                 <div class="card-body">
                                     <form method="post" action="../actions/pay-action.php?id=<?php echo $productID; ?>" class="user">
                                         <input type="hidden" name="productName" value="<?php echo $selectedProduct['product_name']; ?>">
-                                        <label for="quantity">Number of Plates:</label>
+                                        <label for="customer"><strong>Customer's Name:</strong></label>
+                                        <input type="text" name="customer" class="col-sm-3 my-1 form-control" required> <br />
+                                        <label for="quantity"><strong>Number of Plates:</strong></label>
                                         <input type="number" name="quantity" class="col-sm-3 my-1 form-control" id="quantityInput" min="1" max="<?php echo $selectedProduct['available']; ?>" required> <br />
-                                        <label for="discount">Discount:</label>
+                                        <label for="discount"><strong>Discount:</strong></label>
                                         <div class="form-inline">
                                             <div class="form-group mb-2">
                                                 <select name="discount" id="selectDiscount" class="form-select form-select-lg">
@@ -90,11 +92,55 @@ if (!$selectedProduct) {
                                                 <input type="number" name="numOfDisc" id="numOfDiscounts" min="1" class="col-sm-4 form-control">
                                             </div>
                                         </div>
-
+                                        <hr>
                                         <h3>Transaction Summary</h3>
-                                        <p>Subtotal: ₱ <span id="subtotal">0.00</span></p>
+                                        <!-- <p>Subtotal: ₱ <span id="subtotal">0.00</span></p>
                                         <p>Discount: <span id="discount">0.00</span> %</p>
-                                        <p>Total: ₱ <span id="total">0.00</span></p>
+                                        <p>Total: ₱ <span id="total">0.00</span></p> -->
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6 col-md-8">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        Subtotal
+                                                    </div>
+                                                    <div class="col">
+                                                        <span id="subtotal">0.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6 col-md-8">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        Discount
+                                                    </div>
+                                                    <div class="col">
+                                                        <span id="discount">0.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6 col-md-8">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <strong>TOTAL</strong>
+                                                    </div>
+                                                    <div class="col">
+                                                        <span id="total">0.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <hr>
                                         <button type="submit" class="btn btn-sm btn-success" name="pay">Purchase</button>
                                     </form>
                                 </div>
@@ -119,13 +165,18 @@ if (!$selectedProduct) {
                 });
 
                 function updateTransactionSummary() {
+                    const formatter = new Intl.NumberFormat('en-PH', {
+                        style: 'currency',
+                        currency: 'PHP',
+                    });
+
                     var quantity = parseInt(document.getElementById('quantityInput').value);
+                    quantity = isNaN(quantity) ? 0 : quantity;
                     var price = <?php echo $selectedProduct['price']; ?>;
                     var discountType = document.getElementById('selectDiscount').value;
                     var numOfDiscount = parseInt(document.getElementById('numOfDiscounts').value);
-
                     var subtotal = quantity * price;
-                    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+                    document.getElementById('subtotal').innerText = formatter.format(subtotal);
 
                     var discount = 0;
 
@@ -137,14 +188,25 @@ if (!$selectedProduct) {
                         discount = .20;
                     }
 
-                    if (numOfDiscount > 0) {
-                        discount *= numOfDiscount;
+                    //calculate the discount first
+                    var discountedPrice = price * discount;
+
+                    if(discount > 0 && isNaN(numOfDiscount)){
+                        numOfDiscount = 1;
                     }
 
-                    document.getElementById('discount').innerText = (discount * 100).toFixed(2);
+                    //then calculate how many person is discounted
+                    var finalDiscount = discountedPrice * numOfDiscount;
 
-                    var total = subtotal - (subtotal * discount);
-                    document.getElementById('total').innerText = total.toFixed(2);
+                    if(discountType === 'none'){
+                        finalDiscount = 0;
+                    }
+
+
+                    document.getElementById('discount').innerText = formatter.format(finalDiscount);
+
+                    var total = subtotal - finalDiscount;
+                    document.getElementById('total').innerText = formatter.format(total);
                 }
             </script>
 

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../classes/Product.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedProduct = $product->getProductById($productID);
 
     $prodName = isset($_POST['productName']) ? strval($_POST['productName']) : "";
+    $customerName = isset($_POST['customer']) ? strval($_POST['customer']) : "";
     $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 0;
     $selectedDiscount = isset($_POST['discount']) ? $_POST['discount'] : 'none';
     $numOfDiscounts = isset($_POST['numOfDisc']) ? intval($_POST['numOfDisc']) : 0;
@@ -29,14 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($selectedDiscount === '5blw') {
             $discount = .20;
         }
-        if ($numOfDiscounts > 0) {
-            $discount *= $numOfDiscounts;
+
+        //calculate the discount first
+        $discountedPrice = $selectedProduct['price'] * $discount;
+
+        //then calculate how many person is discounted
+        $finalDiscount = $discountedPrice * $numOfDiscounts;
+        
+        if($finalDiscount <= 0){
+            $finalDiscount = 0;
         }
+        $total = $subtotal - $finalDiscount;
 
-        $total = $subtotal - ($subtotal * $discount);
-
-        $product->processTransaction($productID, $prodName, $quantity, $total);
-
+        $product->processTransaction($productID, $customerName, $prodName, $quantity, $total, $finalDiscount);
+        
+        //set success message after successful purchase
+        $_SESSION['success_message'] = 'Purchase successful!';
+        
         header('Location: ../views/menu.php');
         exit();
     } else {
