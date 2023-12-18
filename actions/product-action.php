@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 
     if ($check !== false) {
 
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $allowedExtensions = ['jpg', 'jpeg', 'png'];
         if (in_array($imageFileType, $allowedExtensions)) {
             move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 
             $_SESSION['success_message'] = 'New product was added!';
         }else{
-            $_SESSION['error_message'] = 'Sorry only JPG, JPEG, PNG, and GIF files are allowed!';
+            $_SESSION['error_message'] = 'Sorry only JPG, JPEG, and PNG files are allowed!';
         }
     }else{
         $_SESSION['error_message'] = 'File is not an image!';
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     } else {
         if ($check !== false) {
 
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+            $allowedExtensions = ['jpg', 'jpeg', 'png'];
             if (in_array($imageFileType, $allowedExtensions)) {
                 move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
 
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 
                 $_SESSION['update_message'] = '<strong>Sucesss!</strong> Product has been updated!';
             } else {
-                $_SESSION['error_message'] = 'Sorry only JPG, JPEG, PNG, and GIF files are allowed!';
+                $_SESSION['error_message'] = 'Sorry only JPG, JPEG, and PNG files are allowed!';
             }
         } else {
             $_SESSION['error_message'] = 'File is not an image!';

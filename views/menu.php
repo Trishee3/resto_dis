@@ -55,7 +55,12 @@ unset($_SESSION['success_message']);
                                             <h5 class="card-title"><?php echo $product['product_name']; ?></h5>
                                             <p class="card-text">Price: ₱ <?php echo number_format($product['price'], 2, '.', ','); ?></p>
                                             <p class="card-text">Available: <?php echo $product['available']; ?></p>
-                                            <a href="pay.php?id=<?php echo $product['id']; ?>" class="btn btn-primary">Purchase</a>
+                                            <?php if($product['available'] <= 0) : ?>
+                                                <a href="#" class="btn btn-primary disabled">Purchase</a>
+                                            <?php endif; ?>
+                                            <?php if($product['available'] > 0) : ?>
+                                                <a href="pay.php?id=<?php echo $product['id']; ?>" class="btn btn-primary">Purchase</a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
