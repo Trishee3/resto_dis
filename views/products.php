@@ -170,7 +170,8 @@ unset($_SESSION['delete_message']);
             </div>
         </div>
     </div>
-    <?php include 'add-productmodal.php'; ?>
+    <?php include 'existing-product-modal.php'; ?>
+    <?php include 'add-product-modal.php'; ?>
     <?php include 'deletemodal.php'; ?>
     <?php include 'logoutmodal.php'; ?>
     <!-- Bootstrap core JavaScript-->
@@ -189,6 +190,18 @@ unset($_SESSION['delete_message']);
 
     <!-- Page level custom scripts -->
     <script src="../assets/js/demo/datatables-demo.js"></script>
+
+    <!-- <script>
+        // Assuming you have a condition to check if the product already exists
+        var productAlreadyExists = <?php echo $existingProduct; ?>;
+
+        // Check the condition and show the modal if necessary
+        if (productAlreadyExists) {
+            $(document).ready(function () {
+                $("#existingProductModal").modal("show");
+            });
+        }
+    </script> -->
 </body>
 
 </html>

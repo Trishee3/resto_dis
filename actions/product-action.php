@@ -15,29 +15,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $price = $_POST['price'];
     $available = $_POST['available'];
 
+    $existingProduct = new Product();
+    $existingProductName = $existingProduct->getProductByName($productName);
+
     $target_dir = "../assets/uploads/productImage/";
     $target_file = $target_dir . basename($_FILES['image']['name']);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     $check = getimagesize($_FILES['image']['tmp_name']);
 
-    if ($check !== false) {
+    //check if the inputted product name match with existing data in database
+    if ($existingProductName) {
 
-        $allowedExtensions = ['jpg', 'jpeg', 'png'];
-        if (in_array($imageFileType, $allowedExtensions)) {
-            move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
+        //add the inputted available on existing product
+        $existProduct = new Product();
+        $existProduct->updateAvailability($productName, $available);
+        $_SESSION['success_message'] = "The product available has been successfuly added on the <strong class='text-uppercase'>".$productName."</strong> product!";
+    } else {
+        if ($check !== false) {
+            $allowedExtensions = ['jpg', 'jpeg', 'png'];
+            if (in_array($imageFileType, $allowedExtensions)) {
+                move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
 
-            $product = new Product();
-            $product->addProduct($target_file, $productName, $price, $available);
+                $product = new Product();
+                $product->addProduct($target_file, $productName, $price, $available);
 
-            $_SESSION['success_message'] = 'New product was added!';
-        }else{
-            $_SESSION['error_message'] = 'Sorry only JPG, JPEG, and PNG files are allowed!';
+                $_SESSION['success_message'] = 'New product was added!';
+            } else {
+                $_SESSION['error_message'] = 'Sorry only JPG, JPEG, and PNG files are allowed!';
+            }
+        } else {
+            $_SESSION['error_message'] = 'File is not an image!';
         }
-    }else{
-        $_SESSION['error_message'] = 'File is not an image!';
     }
-
 
     header('Location: ../views/products.php');
     exit();

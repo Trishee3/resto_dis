@@ -33,6 +33,25 @@ class Product
         return $result;
     }
 
+    public function getProductByName($productName)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM products WHERE product_name = ?");
+        $stmt->bind_param("s", $productName);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $result;
+    }
+
+    public function updateAvailability($productName, $newAvailability)
+    {
+        $stmt = $this->conn->prepare("UPDATE products SET available = available + ? WHERE product_name = ?");
+        $stmt->bind_param('is', $newAvailability, $productName);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+
     public function addProduct($image, $productName, $price, $available)
     {
         $stmt = $this->conn->prepare("INSERT INTO products (image, product_name, price, available) VALUES (?, ?, ?, ?)");
@@ -82,7 +101,6 @@ class Product
         }
 
         return 0;
-        
     }
 
     public function totalSales()
