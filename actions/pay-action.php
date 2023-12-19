@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //calculate the discount first
         $discountedPrice = $selectedProduct['price'] * $discount;
 
+        //set the number of discounted persons into one(1) if the discount is enabled and the numofdiscount is unset
+        if($discount > 0 && $numOfDiscounts === 0){
+            $numOfDiscounts = 1;
+        }
+
         //then calculate how many person is discounted
         $finalDiscount = $discountedPrice * $numOfDiscounts;
         
