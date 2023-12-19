@@ -1,6 +1,8 @@
 <?php
 
 require_once 'Database.php';
+
+// S = string, I = integer, D = float, B = bool
 class Product
 {
     private $conn;
@@ -76,15 +78,15 @@ class Product
         $stmt->close();
     }
 
-    public function processTransaction($productId, $customerName, $productName, $quantity, $totalCost, $discountedAmount)
+    public function processTransaction($productId, $customerName, $productName, $quantity, $totalCost, $discountedAmount, $numOfDiscount, $selectedDiscount)
     {
         $stmt = $this->conn->prepare("UPDATE products SET available = available - ? WHERE id = ?");
         $stmt->bind_param("ii", $quantity, $productId);
         $stmt->execute();
         $stmt->close();
 
-        $stmt = $this->conn->prepare("INSERT INTO transactions (customer_name, product_name, quantity, discount, total_cost, transaction_Date) VALUES (?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param("ssidd", $customerName, $productName, $quantity, $discountedAmount, $totalCost);
+        $stmt = $this->conn->prepare("INSERT INTO transactions (customer_name, product_name, quantity, discount, discount_type, num_of_discounted, total_cost, transaction_Date) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+        $stmt->bind_param("ssidsid", $customerName, $productName, $quantity, $discountedAmount, $selectedDiscount, $numOfDiscount, $totalCost);
         $stmt->execute();
         $stmt->close();
     }

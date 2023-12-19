@@ -132,6 +132,8 @@ $sales = $sale->getAllSales();
                                                             <div class="row">
                                                                 <div class="col">Product</div>
                                                                 <div class="col">Quantity</div>
+                                                                <div class="col">Discount Type</div>
+                                                                <div class="col">Discounted Persons</div>
                                                                 <div class="col">Amount</div>
                                                             </div>
                                                             <hr>
@@ -141,6 +143,17 @@ $sales = $sale->getAllSales();
                                                                 </div>
                                                                 <div class="col">
                                                                     <?php echo $sale['quantity']?>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <?php echo $sale['discount_type']; ?>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <?php if($sale['num_of_discounted'] > 0) : ?>
+                                                                        <?php echo $sale['num_of_discounted']; ?>
+                                                                    <?php endif; ?>
+                                                                    <?php if($sale['num_of_discounted'] <= 0) : ?>
+                                                                        <?php echo 'None' ; ?>
+                                                                    <?php endif; ?>
                                                                 </div>
                                                                 <div class="col">
                                                                     ₱ <?php echo number_format($sale['total_cost'] +  $sale['discount'], 2, '.', ',')?>
